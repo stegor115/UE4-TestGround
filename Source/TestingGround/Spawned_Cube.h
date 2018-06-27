@@ -13,6 +13,8 @@ class TESTINGGROUND_API ASpawned_Cube : public AActor
 	//Cube
 	UPROPERTY(VisibleAnywhere, BluePrintReadWrite, Category = Cube, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* Cube;
+	UPROPERTY(VisibleAnywhere, BluePrintReadWrite, Category = Projectile, meta = (AllowPrivateAccess = "true"))
+	class UProjectileMovementComponent* Flinger;
 
 public:	
 	// Sets default values for this actor's properties

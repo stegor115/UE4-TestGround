@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Spawned_Cube.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 
@@ -20,6 +21,9 @@ ASpawned_Cube::ASpawned_Cube()
 	Cube->SetStaticMesh(cubeMesh.Object);
 	//Physics
 	Cube->SetSimulatePhysics(true);
+	//Add Force Here
+	Flinger = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Flinger"));
+	Flinger->Velocity = FVector(5000.0f, 0.0f, 0.0f);
 }
 
 // Called when the game starts or when spawned

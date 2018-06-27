@@ -5,10 +5,10 @@
 #include "Engine/World.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Camera/CameraComponent.h"
-#include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
 AAvatar::AAvatar()
@@ -59,6 +59,7 @@ void AAvatar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	//Actions
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Action", IE_Pressed, this, &AAvatar::Action);
+	PlayerInputComponent->BindAction("ToggleBox", IE_Pressed, this, &AAvatar::ToggleBox);
 	//Camera Handling
 	PlayerInputComponent->BindAction("ZoomOut", IE_Pressed, this, &AAvatar::ZoomOut);
 	PlayerInputComponent->BindAction("ZoomIn", IE_Pressed, this, &AAvatar::ZoomIn);
@@ -74,11 +75,18 @@ void AAvatar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 //Actions
 
+void AAvatar::ToggleBox()
+{
+	SpawnerCube->ToggleVisibility();
+}
+
 void AAvatar::Action()
 {
+
 	FActorSpawnParameters SpawnInfo;
 	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 	GetWorld()->SpawnActor<ASpawned_Cube>(SpawnerCube->GetComponentLocation(), SpawnerCube->GetComponentRotation(), SpawnInfo);
+
 }
 //Camera Handling--------------------------------------------------------------
 void AAvatar::ZoomOut() 
