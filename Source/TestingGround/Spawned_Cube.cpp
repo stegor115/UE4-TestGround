@@ -15,7 +15,8 @@ ASpawned_Cube::ASpawned_Cube()
 	//A good idea in the future, Blueprints might help a lot to make first, then try to replicate.
 	//Cube
 	Cube = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cube"));
-	Cube->SetupAttachment(RootComponent);
+	RootComponent = Cube;
+	//Cube->SetupAttachment(RootComponent);
 	//Set Mesh to Cube
 	ConstructorHelpers::FObjectFinder<UStaticMesh>cubeMesh(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'")); //Finds the desired mesh, and ties it to cubeMesh
 	Cube->SetStaticMesh(cubeMesh.Object);
@@ -23,7 +24,7 @@ ASpawned_Cube::ASpawned_Cube()
 	Cube->SetSimulatePhysics(true);
 	//Add Force Here
 	Flinger = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Flinger"));
-	Flinger->Velocity = FVector(100.0f, 0.0f, 0.0f);
+	Flinger->Velocity = FVector(500.0f, 0.0f, 0.0f);
 }
 
 // Called when the game starts or when spawned
@@ -40,3 +41,7 @@ void ASpawned_Cube::Tick(float DeltaTime)
 
 }
 
+UStaticMeshComponent* ASpawned_Cube::getCube()
+{
+	return Cube;
+}

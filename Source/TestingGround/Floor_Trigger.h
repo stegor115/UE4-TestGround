@@ -16,9 +16,9 @@ class TESTINGGROUND_API AFloor_Trigger : public AActor
 	//Cube
 	UPROPERTY(VisibleAnywhere, BluePrintReadWrite, Category = Cube, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* Cube;
-	//Plane that acts as the trigger
+	//Box that acts as the trigger
 	UPROPERTY(VisibleAnywhere, BluePrintReadWrite, Category = Trigger, meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* Trigger;
+	class UBoxComponent* Trigger;
 public:	
 	// Sets default values for this actor's properties
 	AFloor_Trigger();
@@ -30,7 +30,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	//Overlap
+	UFUNCTION()
+	void Triggered(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
-	
-	
 };

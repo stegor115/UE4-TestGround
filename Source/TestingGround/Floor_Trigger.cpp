@@ -4,6 +4,7 @@
 #include "Spawned_Cube.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/SceneComponent.h"
+#include "Components/BoxComponent.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 
 
@@ -23,13 +24,20 @@ AFloor_Trigger::AFloor_Trigger()
 	//Set Mesh to Cube
 	ConstructorHelpers::FObjectFinder<UStaticMesh>cubeMesh(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'")); //Finds the desired mesh, and ties it to cubeMesh
 	Cube->SetStaticMesh(cubeMesh.Object);
+	//Change shape of cube
+	Cube->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f)); //Might be redundant
+	Cube->SetRelativeScale3D(FVector(3.0f, 3.0f, 0.25f));
 
 	//Cube, acts the actual trigger.
-	Trigger = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Trigger"));
+	Trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger"));
 	Trigger->SetupAttachment(RootComponent);
-	//Set Mesh to Cube
-	ConstructorHelpers::FObjectFinder<UStaticMesh>triggerMesh(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'")); //Finds the desired mesh, and ties it to cubeMesh
-	Trigger->SetStaticMesh(triggerMesh.Object);
+	//Sizing
+	Trigger->SetRelativeLocation(FVector(0.0f, 0.0f, 30.0f));
+	Trigger->SetRelativeScale3D(FVector(4.5f,4.5f,0.1f));
+	Trigger->SetVisibility(true);
+	//Overlap Event
+	Trigger->OnComponentBeginOverlap.AddDynamic(this, &AFloor_Trigger::Triggered);
+	
 }
 
 // Called when the game starts or when spawned
@@ -43,6 +51,16 @@ void AFloor_Trigger::BeginPlay()
 void AFloor_Trigger::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//Check if Spawned Cube is on the block
 }
 
+void AFloor_Trigger::Triggered(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	ASpawned_Cube* myCube = Cast<ASpawned_Cube>(OtherActor); //Cast to Spawned_Cube
+	if (myCube != nullptr) {
+		myCube->getCube()->SetEnableGravity(false);
+		UE_LOG(LogTemp, Warning, TEXT("Gravity disabled for cube"));
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("overlapped object is not a cube"));
+	}
+}
